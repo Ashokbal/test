@@ -25,6 +25,7 @@ jobs:
         run: npm install -g sfdx-cli
 
       - name: Deploy to Salesforce
-        run: |
-          sfdx force:auth:sfdxurl:store --sfdxurlfile sfdxurl.txt --setalias fullcrmqa1
-          sfdx force:source:deploy -c -p force-app/main/default/classes/testSignaturehandlerTest.cls-meta.xml
+        run: 
+          echo $SFDC_AUTH_URL > sfdxurl.txt
+          sfdx force:auth:sfdxurl:store -f sfdxurl.txt -a temporg
+          sfdx force:source:deploy -c -p "force-app/main/default/classes/testSignaturehandlerTest.cls-meta.xml" -u temporg  
