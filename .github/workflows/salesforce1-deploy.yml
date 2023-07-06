@@ -24,9 +24,13 @@ jobs:
 
       - name: Install Salesforce CLI
         run: npm install -g sfdx-cli
-
-      - name: Deploy to Salesforce
+        
+      - name: Authenticate with Salesforce
         run: 
           echo $SFDC_AUTH_URL > sfdxurl.txt
-          sfdx force:auth:sfdxurl:store -f sfdxurl.txt -a temporg
-          sfdx force:source:deploy -c -p "force-app/main/default/classes/testSignaturehandlerTest.cls-meta.xml" -u temporg  
+          sfdx force:auth:sfdxurl:store -f sfdxurl.txt -a fullcrmqa
+                 
+
+      - name: Deploy to Salesforce
+        run:          
+          sfdx force:source:deploy -c -p "force-app/main/default/classes/testSignaturehandlerTest.cls-meta.xml" -u fullcrmqa  
