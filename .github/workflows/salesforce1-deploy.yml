@@ -1,0 +1,32 @@
+name: Salesforce Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Load deployment variables
+        run: 
+          echo "SFDC_AUTH_URL=$(grep SFDC_AUTH_URL deploy.env | cut -d '=' -f2)" >> $GITHUB_ENV
+
+      - name: Set up Salesforce CLI
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install Salesforce CLI
+        run: npm install -g sfdx-cli
+
+      - name: Deploy to Salesforce
+        run: 
+          echo $SFDC_AUTH_URL > sfdxurl.txt
+          sfdx force:auth:sfdxurl:store -f sfdxurl.txt -a temporg
+          sfdx force:source:deploy -c -p "force-app/main/default/classes/testSignaturehandlerTest.cls-meta.xml" -u temporg  
