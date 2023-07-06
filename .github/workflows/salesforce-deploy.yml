@@ -1,0 +1,30 @@
+name: Salesforce Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Load deployment variables
+        run: echo "source deploy.env" >> $GITHUB_ENV
+
+      - name: Set up Salesforce CLI
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install Salesforce CLI
+        run: npm install -g sfdx-cli
+
+      - name: Deploy to Salesforce
+        run: |
+          sfdx force:auth:sfdxurl:store --sfdxurlfile sfdxurl.txt --setalias fullcrmqa1
+          sfdx force:source:deploy -c -p force-app/main/default/classes/testSignaturehandlerTest.cls-meta.xml
