@@ -18,7 +18,7 @@ jobs:
         run: 
           echo "SFDC_AUTH_URL1=$(grep SFDC_AUTH_URL1 deploy.env | cut -d '=' -f2)" >> $GITHUB_ENV
 
-     - name: Set up Salesforce CLI
+      - name: Set up Salesforce CLI
         uses: actions/setup-node@v2
         with:
           node-version: '16'
@@ -27,7 +27,12 @@ jobs:
         run: npm install -g sfdx-cli
 
       - name: Install vlocityestools
-        run: echo -e "y" | sfdx plugins:install vlocityestools      
+        run: echo -e "y" | sfdx plugins:install vlocityestools     
+ 
+      - name: Authenticate with Salesforce
+        run: | 
+             echo $SFDC_AUTH_URL1 > sfdxurl1.txt
+             sfdx force:auth:sfdxurl:store -f sfdxurl1.txt -a devop29jun
                  
 
       - name: Deploy to Salesforce (Feature Branch)
@@ -40,4 +45,5 @@ jobs:
         if: startsWith(github.ref, 'refs/heads/release/')
         run: | 
             sfdx force:source:deploy -c -p "force-app" -u devop29jun --verbose --ignorewarnings
+                        
         
