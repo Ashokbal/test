@@ -49,6 +49,7 @@ jobs:
         if: startsWith(github.ref, 'refs/heads/release/')
         run: | 
             sfdx vlocityestools:sfsource:createdeltapackage -u devop29jun -p cmt -d force-app -c GeneralSettings__c -v VBTDeployKey_SF
+            if [ -d force-app_delta ]; then
             sfdx force:source:deploy -c -p "force-app_delta" -u devop29jun --verbose --ignorewarnings
             head_commit=$(git rev-parse HEAD)
             sfdx force:data:record:update -s GeneralSettings__c  -w "Name='VBTDeployKey_SF'" -v "Value__c='$head_commit'" -u devop29jun
