@@ -1,0 +1,53 @@
+name: Salesforce Deployment
+
+on:
+  push:
+    branches:
+      - 'feature/*'
+      - 'release/*'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Load deployment variables
+        run: 
+          echo "SFDC_AUTH_URL1=$(grep SFDC_AUTH_URL1 deploy.env | cut -d '=' -f2)" >> $GITHUB_ENV
+
+      - name: Set up Salesforce CLI
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install Salesforce CLI
+        run: npm install -g sfdx-cli
+
+      - name: Install vlocityestools
+        run: echo -e "y" | sfdx plugins:install vlocityestools     
+ 
+      - name: Authenticate with Salesforce
+        run: | 
+             echo $SFDC_AUTH_URL1 > sfdxurl1.txt
+             sfdx force:auth:sfdxurl:store -f sfdxurl1.txt -a devop29jun
+                 
+
+      - name: Deploy to Salesforce (Feature Branch)
+        if: startsWith(github.ref, 'refs/heads/feature/')      
+        run: |
+            sfdx vlocityestools:sfsource:createdeltapackage -u devop29jun -p cmt -d force-app -c GeneralSettings__c -v VBTDeployKey_SF        
+            sfdx force:source:deploy -c -p "force-app_delta" -u devop29jun --verbose --ignorewarnings
+
+      - name: Deploy to Salesforce (Release Branch)
+        if: startsWith(github.ref, 'refs/heads/release/')
+        run: | 
+            sfdx vlocityestools:sfsource:createdeltapackage -u devop29jun -p cmt -d force-app -c GeneralSettings__c -v VBTDeployKey_SF
+            sfdx force:source:deploy -c -p "force-app_delta" -u devop29jun --verbose --ignorewarnings
+            head_commit=$(git rev-parse HEAD)
+            sfdx force:data:record:update -s GeneralSettings__c  -w "Name='VBTDeployKey_SF'" -v "Value__c='$head_commit'" -u $
+            devop29jun
+                        
+        
