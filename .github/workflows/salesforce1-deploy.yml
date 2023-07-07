@@ -30,7 +30,7 @@ jobs:
  
       - name: Authenticate with Salesforce
         run: | 
-             echo force://${{ secrets.CLIENT_ID }}:${{ secrets.CLIENT_SECRET }}:${{ secrets.REFRESH_TOKEN }}@${{ secrets.INSTANCE_URL }} > sfdxurl1.txt
+             echo ${{ secrets.SFDX_AUTH_URL1 }} > sfdxurl1.txt
              sfdx force:auth:sfdxurl:store -f sfdxurl1.txt -a devop29jun
                  
 
