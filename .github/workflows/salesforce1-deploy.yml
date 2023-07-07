@@ -12,7 +12,7 @@ on:
 jobs:
    deploy:
     runs-on: ubuntu-latest
-    container: jfgarcia268/vlocity_sfdx:latest
+
 
     steps:
       - name: Checkout code
@@ -28,7 +28,10 @@ jobs:
           node-version: '16'
 
       - name: Install Salesforce CLI
-        run: npm install -g sfdx-cli           
+        run: npm install -g sfdx-cli 
+        
+      - name: Install vlocityestools
+        run: echo -e "y" | sfdx plugins:install vlocityestools          
 
  
       - name: Authenticate with Salesforce
