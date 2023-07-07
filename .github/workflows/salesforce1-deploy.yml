@@ -3,8 +3,10 @@ name: Salesforce Deployment
 on:
   pull_request:
     branches:
-      - 'feature/*'
       - 'release/*'
+  push:
+    branches:
+      - 'feature/*'       
 
 jobs:
    deploy:
