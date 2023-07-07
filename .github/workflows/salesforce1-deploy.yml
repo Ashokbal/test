@@ -33,6 +33,6 @@ jobs:
 
       - name: Deploy to Salesforce
         run: 
-            sfdx force:source:deploy -c -p "force-app/main/default/classes/testSignaturehandlerTest.cls-meta.xml" --target-org devop29jun --verbose --ignorewarnings
+            sfdx force:source:deploy -c -p "force-app/main/default/classes/testSignaturehandlerTest.cls-meta.xml" -u devop29jun --verbose --ignorewarnings
         
         
