@@ -25,7 +25,10 @@ jobs:
           node-version: '16'
 
       - name: Install Salesforce CLI
-        run: npm install -g sfdx-cli     
+        run: npm install -g sfdx-cli 
+
+      - name: Install vlocityestools
+        run: echo -e "y" | sfdx plugins:install vlocityestools         
       
  
       - name: Authenticate with Salesforce
@@ -38,7 +41,10 @@ jobs:
 
       - name: Deploy to Salesforce (Feature Branch)
         if: startsWith(github.ref, 'refs/heads/feature/')      
-        run: |                 
+        run: |
+            sfdx vlocityestools:sfsource:createdeltapackage -u devop29jun -p cmt -d force-app -c GeneralSettings__c -v VBTDeployKey_SF
+            if [ -d force-app_delta ]; then
+            echo "Running the Deployment"                        
             sfdx force:source:deploy -c -p "force-app" -u devop29jun --verbose --ignorewarnings
 
       - name: Deploy to Salesforce (Release Branch)
