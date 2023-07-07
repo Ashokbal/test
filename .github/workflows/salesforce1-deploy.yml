@@ -29,8 +29,10 @@ jobs:
       
  
       - name: Authenticate with Salesforce
+        env:
+           SFDX_AUTH_URL2: ${{ secrets.SFDX_AUTH_URL2 }}
         run: | 
-             echo '${{ secrets.SFDX_AUTH_URL1 }}' > sfdxurl1.txt
+             echo ''${{ secrets.SFDX_AUTH_URL2 }}'' > sfdxurl1.txt
              sfdx force:auth:sfdxurl:store -f sfdxurl1.txt -a devop29jun
                  
 
