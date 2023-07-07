@@ -52,4 +52,7 @@ jobs:
       - name: Deploy to Salesforce (Release Branch)
         if: startsWith(github.ref, 'refs/heads/release/')
         run: | 
-            sfdx force:source:deploy -c -p "force-app" -u devop29jun --verbose --ignorewarnings            
+            sfdx vlocityestools:sfsource:createdeltapackage -u devop29jun -p cmt -d force-app -c GeneralSettings__c -v VBTDeployKey_SF
+            if [ -d force-app_delta ]; then
+            echo "Running the Deployment"
+            sfdx force:source:deploy -c -p "force-app_delta" -u devop29jun --verbose --ignorewarnings            
