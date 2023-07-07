@@ -5,8 +5,10 @@ on:
     branches:
       - 'feature/*'
       - 'release/*'
-    paths:
-      - force-app/*            
+    paths-ignore: 
+      - 'force-app_delta/**'
+      - 'README.md' 
+      - '.github/**'
 
 jobs:
    deploy:
