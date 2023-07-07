@@ -3,7 +3,8 @@ name: Salesforce Deployment
 on:
   push:
     branches:
-      - main
+      - 'feature/*'
+      - 'release/*'
 
 jobs:
   deploy:
@@ -31,8 +32,13 @@ jobs:
              sfdx force:auth:sfdxurl:store -f sfdxurl.txt -a devop29jun
                  
 
-      - name: Deploy to Salesforce
+      - name: Deploy to Salesforce (Feature Branch)
+        if: startsWith(github.ref, 'refs/heads/feature/')      
         run: | 
             sfdx force:source:deploy -c -p "force-app/main/default/classes/testSignaturehandlerTest.cls-meta.xml" -u devop29jun --verbose --ignorewarnings
-        
+
+      - name: Deploy to Salesforce (Release Branch)
+        if: startsWith(github.ref, 'refs/heads/release/')
+        run: | 
+            sfdx force:source:deploy -c -p "force-app/main/default/classes/testSignaturehandlerTest.cls-meta.xml" -u devop29jun --verbose --ignorewarnings        
         
