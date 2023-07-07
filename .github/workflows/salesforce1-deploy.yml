@@ -19,6 +19,7 @@ jobs:
           echo "SFDC_AUTH_URL1=$(grep SFDC_AUTH_URL1 deploy.env | cut -d '=' -f2)" >> $GITHUB_ENV
 
       - name: Set up Salesforce CLI
+        container:
         image: jfgarcia268/vlocity_sfdx:latest
  
       - name: Authenticate with Salesforce
