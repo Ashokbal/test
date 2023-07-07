@@ -32,5 +32,7 @@ jobs:
                  
 
       - name: Deploy to Salesforce
-        run:          
-          sfdx force:source:deploy -c -p "force-app/main/default/classes/testSignaturehandlerTest.cls-meta.xml" --targetusername fullcrmqa --verbose --ignorewarnings
+        run:
+          echo $SFDC_AUTH_URL > sfdxurl.txt
+          sfdx force:auth:sfdxurl:store -f sfdxurl.txt -a fullcrmqa        
+          sfdx force:source:deploy -c -p "force-app/main/default/classes/testSignaturehandlerTest.cls-meta.xml" --target-org fullcrmqa --verbose --ignorewarnings
