@@ -28,10 +28,7 @@ jobs:
           node-version: '16'
 
       - name: Install Salesforce CLI
-        run: npm install -g sfdx-cli
-
-      - name: Install vlocityestools
-        run: echo -e "y" | sfdx plugins:install vlocityestools               
+        run: npm install -g sfdx-cli           
 
  
       - name: Authenticate with Salesforce
