@@ -1,11 +1,6 @@
 name: Salesforce Deployment
 
-on:
-  pull_request:
-    branches:
-      - 'main'
-    paths:
-      - force-app/*       
+on:   
   push:
     branches:
       - 'feature/*'
