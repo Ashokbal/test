@@ -5,12 +5,12 @@ on:
     branches:
       - 'feature/*'
       
-   workflow_dispatch:
+  workflow_dispatch:
     branches:
       - 'release/*'
 
 jobs:
-  deploy:
+   deploy:
     runs-on: ubuntu-latest
 
     steps:
