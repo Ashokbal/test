@@ -34,11 +34,17 @@ jobs:
 
       - name: Deploy to Salesforce (Feature Branch)
         if: startsWith(github.ref, 'refs/heads/feature/')      
-        run: | 
-            sfdx force:source:deploy -c -p "force-app/main/default/classes/testSignaturehandlerTest.cls-meta.xml" -u devop29jun --verbose --ignorewarnings
+        run: |
+            sfdx vlocityestools:sfsource:createdeltapackage -u devop29jun -p cmt -d force-app -c GeneralSettings__c -v VBTDeployKey_SF        
+            sfdx force:source:deploy -c -p "force-app_delta" -u devop29jun --verbose --ignorewarnings
 
       - name: Deploy to Salesforce (Release Branch)
         if: startsWith(github.ref, 'refs/heads/release/')
         run: | 
-            sfdx force:source:deploy -c -p "force-app/main/default/classes/testSignaturehandlerTest.cls-meta.xml" -u devop29jun --verbose --ignorewarnings        
+            sfdx vlocityestools:sfsource:createdeltapackage -u devop29jun -p cmt -d force-app -c GeneralSettings__c -v VBTDeployKey_SF
+            sfdx force:source:deploy -c -p "force-app_delta" -u devop29jun --verbose --ignorewarnings
+            head_commit=$(git rev-parse HEAD)
+            sfdx force:data:record:update -s GeneralSettings__c  -w "Name='VBTDeployKey_SF'" -v "Value__c='$head_commit'" -u $
+            devop29jun
+                        
         
