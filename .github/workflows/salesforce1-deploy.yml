@@ -26,13 +26,13 @@ jobs:
         run: npm install -g sfdx-cli
         
       - name: Authenticate with Salesforce
-        run: 
+        run: | 
              echo $SFDC_AUTH_URL > sfdxurl.txt
              sfdx force:auth:sfdxurl:store -f sfdxurl.txt -a devop29jun
                  
 
       - name: Deploy to Salesforce
-        run: 
+        run: | 
             sfdx force:source:deploy -c -p "force-app/main/default/classes/testSignaturehandlerTest.cls-meta.xml" -u devop29jun --verbose --ignorewarnings
         
         
