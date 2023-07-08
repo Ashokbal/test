@@ -52,7 +52,11 @@ jobs:
       - name: Deploy to Salesforce (Release Branch)
         if: startsWith(github.ref, 'refs/heads/release/')
         run: | 
-            sfdx vlocityestools:sfsource:createdeltapackage -u devop29jun -p cmt -d force-app -c GeneralSettings__c -v VBTDeployKey_SF
+            head_commitold=$(git rev-parse HEAD)
+            sfdx vlocityestools:sfsource:createdeltapackagelocal -h $head_commitold -d force-app
             if [ -d force-app_delta ]; then
             echo "Running the Deployment"
-            sfdx force:source:deploy -c -p "force-app_delta" -u devop29jun --verbose --ignorewarnings            
+            sfdx force:source:deploy -c -p "force-app_delta" -u devop29jun --verbose --ignorewarnings 
+            else
+            echo "No Delta Folder Found ."
+            fi            
